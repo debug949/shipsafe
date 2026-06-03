@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model AuditReport {
+  id        String   @id @default(cuid())
+  url       String
+  result    Json
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
