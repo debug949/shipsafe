@@ -1,6 +1,6 @@
 # ShipSafe — Project Capsule
 
-> Last updated: 2026-06-03
+> Last updated: 2026-06-03 — redesign committed
 
 ---
 
@@ -67,6 +67,21 @@ All checks run server-side via `Promise.all` — 19 parallel HTTP requests to th
 - [x] Model-agnostic AI provider interface (Groq default, OpenAI/Grok ready)
 - [x] Silent failure on missing DB/AI keys — core audit always works
 - [x] Production build passing, TypeScript clean
+
+---
+
+## Design
+
+Redesigned from "AI SaaS template" to GitHub Dark developer-tool aesthetic:
+
+- **Color system:** `#0d1117` background, `#161b22` surfaces, `#30363d` borders — GitHub's exact dark palette
+- **Typography:** 14px base, tight hierarchy, monospace for URLs/code/fix hints
+- **Layout:** Table-based check list (not colored cards), collapsible passed-checks section
+- **Score display:** Plain `90 / 100  A` — no circular progress ring, no glow
+- **AI panel:** Subtle bordered box, no indigo gradients
+- **Passed checks:** Collapsed by default — don't flood the screen with green ticks
+- **Check rows:** Click to expand fix detail — information density without clutter
+- **Removed:** Emoji icons, pill badges, gradient borders, marketing copy, spinner animation
 
 ---
 
