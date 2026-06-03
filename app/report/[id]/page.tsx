@@ -24,19 +24,20 @@ export default async function ReportPage({ params }: Props) {
   if (!result) notFound()
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
-      <div className="max-w-3xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <Link
-            href="/"
-            className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
-          >
-            ← Audit another site
+    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <header style={{ borderBottom: "1px solid var(--border)" }}>
+        <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 20px", height: 48, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Link href="/" style={{ fontWeight: 600, fontSize: 15, color: "var(--text)", textDecoration: "none", letterSpacing: "-0.01em" }}>
+            ShipSafe
           </Link>
-          <span className="text-xs text-zinc-600 font-mono">{id}</span>
+          <Link href="/" style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}>
+            ← New audit
+          </Link>
         </div>
+      </header>
+      <main style={{ maxWidth: 760, margin: "0 auto", padding: "40px 20px 80px" }}>
         <AuditResults result={result} reportId={id} />
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }

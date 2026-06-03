@@ -1,54 +1,66 @@
 import { AuditForm } from "@/components/AuditForm"
 
+const CHECKS = [
+  ["HTTPS", "Protocol enforcement and HTTP→HTTPS redirect"],
+  ["Security headers", "CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy"],
+  ["Exposed files", ".env, .git/config, wp-config.php, credentials.json, database.yml"],
+  ["Cookie flags", "Secure, HttpOnly, SameSite attributes"],
+  ["Info disclosure", "Server and X-Powered-By header leakage"],
+  ["Performance", "PageSpeed score, LCP, FCP, CLS via Google PageSpeed API"],
+]
+
 export default function Home() {
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
-      <div className="max-w-3xl mx-auto px-4 py-16 sm:py-24">
-        <div className="text-center mb-12 space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-medium text-indigo-400 mb-2">
-            Free Security Audit
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-            Is your site ready{" "}
-            <span className="text-indigo-400">to ship?</span>
+    <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      {/* Header */}
+      <header style={{ borderBottom: "1px solid var(--border)" }}>
+        <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 20px", height: 48, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontWeight: 600, fontSize: 15, color: "var(--text)", letterSpacing: "-0.01em" }}>ShipSafe</span>
+          <a
+            href="https://github.com/yourusername/shipsafe"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}
+          >
+            GitHub ↗
+          </a>
+        </div>
+      </header>
+
+      <main style={{ maxWidth: 760, margin: "0 auto", padding: "48px 20px 80px" }}>
+        {/* Hero */}
+        <div style={{ marginBottom: 40 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 600, color: "var(--text)", margin: "0 0 10px", letterSpacing: "-0.02em", lineHeight: 1.3 }}>
+            Web security audit
           </h1>
-          <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-            Instant security audit. Checks HTTPS, security headers, and exposed sensitive files —
-            before your users find them.
+          <p style={{ fontSize: 15, color: "var(--text-muted)", margin: 0, maxWidth: 480, lineHeight: 1.6 }}>
+            Paste a URL. Get a scored security report with AI-generated fixes in under 20 seconds. Free, no account required.
           </p>
         </div>
 
         <AuditForm />
 
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-          {[
-            {
-              icon: "🔒",
-              title: "Security Headers",
-              desc: "CSP, HSTS, X-Frame-Options, and more",
-            },
-            {
-              icon: "🔍",
-              title: "Exposed Files",
-              desc: ".env, .git/config, credentials — publicly accessible?",
-            },
-            {
-              icon: "🌐",
-              title: "HTTPS Enforcement",
-              desc: "TLS enabled, HTTP redirects correctly",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="rounded-xl border border-zinc-800 bg-zinc-900 p-5"
-            >
-              <div className="text-2xl mb-2">{item.icon}</div>
-              <div className="text-sm font-semibold text-zinc-200 mb-1">{item.title}</div>
-              <div className="text-xs text-zinc-500">{item.desc}</div>
-            </div>
-          ))}
+        {/* What we check */}
+        <div style={{ marginTop: 56, borderTop: "1px solid var(--border-muted)", paddingTop: 32 }}>
+          <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.08em", margin: "0 0 16px" }}>
+            What gets checked
+          </p>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <tbody>
+              {CHECKS.map(([name, desc]) => (
+                <tr key={name} style={{ borderBottom: "1px solid var(--border-muted)" }}>
+                  <td style={{ padding: "10px 16px 10px 0", width: 160, fontSize: 13, fontWeight: 500, color: "var(--text)", whiteSpace: "nowrap", verticalAlign: "top" }}>
+                    {name}
+                  </td>
+                  <td style={{ padding: "10px 0", fontSize: 13, color: "var(--text-muted)", lineHeight: 1.5 }}>
+                    {desc}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   )
 }

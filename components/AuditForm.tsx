@@ -13,7 +13,8 @@ export function AuditForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!url.trim()) return
+    const trimmed = url.trim()
+    if (!trimmed) return
 
     setLoading(true)
     setError(null)
@@ -24,59 +25,95 @@ export function AuditForm() {
       const res = await fetch("/api/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: url.trim() }),
+        body: JSON.stringify({ url: trimmed }),
       })
-
       const data = await res.json()
-
       if (!res.ok) {
-        setError(data.error ?? "Audit failed. Check the URL and try again.")
+        setError(data.error ?? "Audit failed.")
         return
       }
-
       setResult(data)
       setReportId(data.reportId ?? null)
     } catch {
-      setError("Network error. Please try again.")
+      setError("Network error. Check your connection and try again.")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="w-full space-y-8">
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full max-w-2xl mx-auto">
-        <input
-          type="text"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          placeholder="https://yoursite.com"
-          className="flex-1 rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-3 text-zinc-100 placeholder-zinc-500 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-          disabled={loading}
-        />
-        <button
-          type="submit"
-          disabled={loading || !url.trim()}
-          className="rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed px-6 py-3 text-sm font-semibold text-white transition-colors shrink-0"
-        >
-          {loading ? "Scanning…" : "Audit Site"}
-        </button>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input
+            type="text"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://example.com"
+            disabled={loading}
+            style={{
+              flex: 1,
+              height: 36,
+              padding: "0 12px",
+              background: "var(--bg-subtle)",
+              border: "1px solid var(--border)",
+              borderRadius: 6,
+              color: "var(--text)",
+              fontSize: 14,
+              fontFamily: "var(--font-geist-mono), monospace",
+              outline: "none",
+              transition: "border-color 0.15s",
+            }}
+            onFocus={(e) => (e.target.style.borderColor = "var(--blue)")}
+            onBlur={(e) => (e.target.style.borderColor = "var(--border)")}
+          />
+          <button
+            type="submit"
+            disabled={loading || !url.trim()}
+            style={{
+              height: 36,
+              padding: "0 16px",
+              background: loading || !url.trim() ? "var(--border)" : "var(--blue)",
+              border: "none",
+              borderRadius: 6,
+              color: "#fff",
+              fontSize: 13,
+              fontWeight: 500,
+              cursor: loading || !url.trim() ? "not-allowed" : "pointer",
+              whiteSpace: "nowrap",
+              transition: "background 0.15s",
+            }}
+          >
+            {loading ? "Scanning…" : "Run audit"}
+          </button>
+        </div>
+
+        {loading && (
+          <p style={{ margin: "12px 0 0", fontSize: 13, color: "var(--text-muted)" }}>
+            Running checks — this takes 10–20 seconds…
+          </p>
+        )}
       </form>
 
-      {loading && (
-        <div className="flex flex-col items-center gap-3 py-12">
-          <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-zinc-400">Running security checks…</p>
-        </div>
-      )}
-
       {error && (
-        <div className="max-w-2xl mx-auto rounded-lg border border-red-900/50 bg-red-900/20 px-4 py-3 text-sm text-red-400">
+        <div style={{
+          marginTop: 16,
+          padding: "10px 14px",
+          background: "rgba(248, 81, 73, 0.08)",
+          border: "1px solid rgba(248, 81, 73, 0.3)",
+          borderRadius: 6,
+          fontSize: 13,
+          color: "var(--red)",
+        }}>
           {error}
         </div>
       )}
 
-      {result && <AuditResults result={result} reportId={reportId} />}
+      {result && (
+        <div style={{ marginTop: 32 }}>
+          <AuditResults result={result} reportId={reportId} />
+        </div>
+      )}
     </div>
   )
 }
