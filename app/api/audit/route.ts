@@ -31,23 +31,26 @@ export async function POST(req: NextRequest) {
   try {
     const result = await runAudit(trimmed)
 
-    // Run AI synthesis in parallel with DB save — both fail silently
     const failedChecks = result.checks.filter((c) => c.status === "fail")
-    const [synthesis, reportId] = await Promise.all([
-      synthesizeAudit(result.url, result.score, result.grade, failedChecks),
-      prisma.auditReport
-        .create({ data: { url: result.url, result: result as object } })
-        .then((r) => r.id)
-        .catch(() => null),
-    ])
+
+    // AI synthesis — fails silently
+    const synthesis = await synthesizeAudit(
+      result.url, result.score, result.grade, failedChecks
+    ).catch(() => null)
 
     const finalResult = { ...result, synthesis: synthesis ?? undefined }
 
-    // Update saved report with synthesis included
-    if (reportId) {
-      await prisma.auditReport
-        .update({ where: { id: reportId }, data: { result: finalResult as object } })
-        .catch(() => null)
+    // DB save — fails silently if DATABASE_URL not set or connection fails
+    let reportId: string | null = null
+    try {
+      if (prisma) {
+        const report = await prisma.auditReport.create({
+          data: { url: finalResult.url, result: finalResult as object },
+        })
+        reportId = report.id
+      }
+    } catch {
+      // No DB — continue without share link
     }
 
     return NextResponse.json({ ...finalResult, reportId })

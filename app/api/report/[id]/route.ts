@@ -7,6 +7,8 @@ export async function GET(
 ) {
   const { id } = await params
 
+  if (!prisma) return NextResponse.json({ error: "Database unavailable." }, { status: 503 })
+
   try {
     const report = await prisma.auditReport.findUnique({ where: { id } })
     if (!report) return NextResponse.json({ error: "Report not found." }, { status: 404 })

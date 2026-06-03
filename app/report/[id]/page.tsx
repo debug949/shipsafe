@@ -14,6 +14,7 @@ export default async function ReportPage({ params }: Props) {
   let result: AuditResult | null = null
 
   try {
+    if (!prisma) notFound()
     const report = await prisma.auditReport.findUnique({ where: { id } })
     if (!report) notFound()
     result = report.result as unknown as AuditResult
