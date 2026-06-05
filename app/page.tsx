@@ -17,7 +17,7 @@ export default function Home() {
         <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 20px", height: 48, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontWeight: 600, fontSize: 15, color: "var(--text)", letterSpacing: "-0.01em" }}>ShipSafe</span>
           <a
-            href="https://github.com/yourusername/shipsafe"
+            href="https://github.com/debug949/shipsafe"
             target="_blank"
             rel="noopener noreferrer"
             style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "none" }}

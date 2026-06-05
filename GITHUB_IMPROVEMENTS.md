@@ -28,7 +28,7 @@ Your Groq API key and database URL live in those files. They must never reach Gi
 
 **4. Set the GitHub "About" section.** On the repo page, click the gear next to "About" and add:
 - **Description:** `Web security audit tool — scans any URL for HTTPS, headers, exposed files, and more, with AI-generated fixes. Next.js · TypeScript · Prisma · PostgreSQL.`
-- **Website:** your live Vercel URL
+- **Website:** https://shipsafe-xzne.vercel.app/
 - **Topics:** `nextjs` `typescript` `security` `web-security` `prisma` `postgresql` `ai` `security-scanner` `vercel`
 
 This is what recruiters see first and it takes 60 seconds.

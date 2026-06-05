@@ -8,8 +8,8 @@
 
 ShipSafe is a free web security audit tool. You paste a URL and within ~15 seconds get a scored report covering HTTPS enforcement, security headers, exposed sensitive files, cookie flags, server information disclosure, and performance — followed by an AI-generated plain-English analysis with prioritized fixes.
 
-**Live:** https://shipsafe.vercel.app (pending deploy)
-**GitHub:** https://github.com/yourusername/shipsafe (pending push)
+**Live:** https://shipsafe-xzne.vercel.app/
+**GitHub:** https://github.com/debug949/shipsafe
 
 ---
 
