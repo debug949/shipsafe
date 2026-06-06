@@ -56,7 +56,7 @@ export default function Home() {
     <div style={{ background: "#000", minHeight: "100dvh" }}>
       {/* Fixed video */}
       <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden" }}>
-        <video autoPlay muted loop playsInline preload="auto"
+        <video autoPlay muted loop playsInline preload="metadata"
           style={{ width: "120%", height: "120%", objectFit: "cover", objectPosition: "top", position: "absolute", left: "50%", top: 0, transform: "translateX(-50%)" }}>
           <source src={VIDEO_URL} type="video/mp4" />
         </video>
@@ -114,6 +114,27 @@ export default function Home() {
             className="liquid-glass-strong"
             style={{ width: "100%", maxWidth: 560, borderRadius: 20, padding: "24px 28px" }}>
             <AuditForm />
+            <div style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", fontFamily: "var(--font-barlow,sans-serif)", letterSpacing: "0.08em", textTransform: "uppercase" }}>Try:</span>
+              {["github.com", "stripe.com", "vercel.com"].map((url) => (
+                <button
+                  key={url}
+                  onClick={() => {
+                    const input = document.querySelector<HTMLInputElement>("input[type='url'],input[type='text'],input[name='url']")
+                    if (!input) return
+                    const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set
+                    setter?.call(input, `https://${url}`)
+                    input.dispatchEvent(new Event("input", { bubbles: true }))
+                    input.focus()
+                  }}
+                  style={{ fontSize: 12, color: "rgba(255,255,255,0.65)", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 9999, padding: "4px 12px", cursor: "pointer", fontFamily: "var(--font-barlow,sans-serif)", transition: "background 0.15s" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.16)" }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)" }}
+                >
+                  {url}
+                </button>
+              ))}
+            </div>
           </motion.div>
 
           <motion.div
