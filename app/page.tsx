@@ -57,7 +57,7 @@ export default function Home() {
       {/* Fixed video */}
       <div style={{ position: "fixed", inset: 0, zIndex: 0, overflow: "hidden" }}>
         <video autoPlay muted loop playsInline preload="metadata"
-          style={{ width: "120%", height: "120%", objectFit: "cover", objectPosition: "top", position: "absolute", left: "50%", top: 0, transform: "translateX(-50%) scale(1.06)", filter: "blur(3px) brightness(0.78)" }}>
+          style={{ width: "120%", height: "120%", objectFit: "cover", objectPosition: "top", position: "absolute", left: "50%", top: 0, transform: "translateX(-50%) scale(1.08)", filter: "blur(5px) brightness(0.72)" }}>
           <source src={VIDEO_URL} type="video/mp4" />
         </video>
       </div>
