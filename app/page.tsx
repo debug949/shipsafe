@@ -75,12 +75,16 @@ export default function Home() {
                 href={link === "GitHub" ? "https://github.com/debug949/shipsafe" : "#"}
                 target={link === "GitHub" ? "_blank" : undefined}
                 rel={link === "GitHub" ? "noopener noreferrer" : undefined}
-                style={{ padding: "6px 14px", borderRadius: 9999, fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.75)", textDecoration: "none", fontFamily: "var(--font-barlow,sans-serif)" }}>
+                style={{ padding: "6px 14px", borderRadius: 9999, fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.75)", textDecoration: "none", fontFamily: "var(--font-barlow,sans-serif)", transition: "color 0.15s" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#fff" }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.75)" }}>
                 {link}
               </a>
             ))}
             <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)", margin: "0 8px" }} />
-            <a href="#audit" style={{ padding: "6px 16px", borderRadius: 9999, fontSize: 13, fontWeight: 500, background: "#fff", color: "#000", textDecoration: "none", fontFamily: "var(--font-barlow,sans-serif)", whiteSpace: "nowrap" }}>
+            <a href="#audit" style={{ padding: "6px 16px", borderRadius: 9999, fontSize: 13, fontWeight: 500, background: "#fff", color: "#000", textDecoration: "none", fontFamily: "var(--font-barlow,sans-serif)", whiteSpace: "nowrap", transition: "opacity 0.15s" }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "0.85" }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.opacity = "1" }}>
               Run Audit ↗
             </a>
           </div>

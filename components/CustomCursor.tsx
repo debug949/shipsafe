@@ -2,9 +2,22 @@
 
 import { useEffect, useRef } from "react"
 
-// ShipSafe cursor — green glowing scan dot + ring matching the security theme
+// ── Canonical cursor engine ───────────────────────────────────
+// Same physics across ShipSafe / Portfolio / Patchwork.
+// Only color constants change per site.
+// ─────────────────────────────────────────────────────────────
+
+const COLOR        = "#3fb950"
+const COLOR_RGBA   = "63,185,80"   // for rgba() glow values
+
+const DOT_SIZE  = 6
+const DOT_R     = DOT_SIZE  / 2
+const RING_SIZE = 30
+const RING_R    = RING_SIZE / 2
+const LERP      = 0.11
+
 export function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null)
+  const dotRef  = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
   const hoverRef = useRef(false)
 
@@ -14,52 +27,50 @@ export function CustomCursor() {
 
     document.body.style.cursor = "none"
 
-    let mouseX = 0
-    let mouseY = 0
-    let ringX = 0
-    let ringY = 0
+    let mouseX = 0, mouseY = 0
+    let ringX  = 0, ringY  = 0
     let rafId: number
-
-    const DOT_R = 3   // half of 6px
-    const RING_R = 15 // half of 30px
 
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
     }
 
-    const onEnter = () => { hoverRef.current = true }
+    const onEnter = () => { hoverRef.current = true  }
     const onLeave = () => { hoverRef.current = false }
 
     const attachListeners = () => {
-      document.querySelectorAll<Element>("a, button, [role='button'], input, textarea, select, label")
-        .forEach(el => {
-          el.addEventListener("mouseenter", onEnter)
-          el.addEventListener("mouseleave", onLeave)
-        })
+      document.querySelectorAll<Element>(
+        "a, button, [role='button'], input, textarea, select, label"
+      ).forEach(el => {
+        el.addEventListener("mouseenter", onEnter)
+        el.addEventListener("mouseleave", onLeave)
+      })
     }
 
     const observer = new MutationObserver(attachListeners)
     observer.observe(document.body, { childList: true, subtree: true })
     attachListeners()
 
-    const animate = () => {
-      const lerp = (a: number, b: number, t: number) => a + (b - a) * t
-      ringX = lerp(ringX, mouseX, 0.11)
-      ringY = lerp(ringY, mouseY, 0.11)
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
-      const isHover = hoverRef.current
+    const animate = () => {
+      ringX = lerp(ringX, mouseX, LERP)
+      ringY = lerp(ringY, mouseY, LERP)
+
+      const h = hoverRef.current
 
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${mouseX - DOT_R}px, ${mouseY - DOT_R}px) scale(${isHover ? 1.5 : 1})`
-        dotRef.current.style.boxShadow = isHover
-          ? "0 0 10px #3fb950, 0 0 24px rgba(63,185,80,0.6)"
-          : "0 0 6px #3fb950, 0 0 16px rgba(63,185,80,0.35)"
+        dotRef.current.style.transform =
+          `translate(${mouseX - DOT_R}px, ${mouseY - DOT_R}px) scale(${h ? 0 : 1})`
       }
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX - RING_R}px, ${ringY - RING_R}px) scale(${isHover ? 1.6 : 1})`
-        ringRef.current.style.opacity = isHover ? "0.6" : "1"
-        ringRef.current.style.borderColor = isHover ? "rgba(63,185,80,0.9)" : "rgba(63,185,80,0.55)"
+        ringRef.current.style.transform =
+          `translate(${ringX - RING_R}px, ${ringY - RING_R}px) scale(${h ? 1.5 : 1})`
+        ringRef.current.style.opacity        = h ? "0.5" : "1"
+        ringRef.current.style.borderColor    = h
+          ? `rgba(${COLOR_RGBA},0.9)`
+          : `rgba(${COLOR_RGBA},0.6)`
       }
 
       rafId = requestAnimationFrame(animate)
@@ -78,41 +89,40 @@ export function CustomCursor() {
 
   return (
     <>
-      {/* Green glow dot */}
+      {/* Dot — snaps to cursor position */}
       <div
         ref={dotRef}
         aria-hidden="true"
         style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: 6,
-          height: 6,
+          position:     "fixed",
+          top: 0, left: 0,
+          width:        DOT_SIZE,
+          height:       DOT_SIZE,
           borderRadius: "50%",
-          background: "#3fb950",
-          boxShadow: "0 0 6px #3fb950, 0 0 16px rgba(63,185,80,0.35)",
-          pointerEvents: "none",
-          zIndex: 999999,
-          willChange: "transform",
-          transition: "transform 0.1s, box-shadow 0.2s",
+          background:   COLOR,
+          boxShadow:    `0 0 6px rgba(${COLOR_RGBA},0.8)`,
+          pointerEvents:"none",
+          zIndex:       999999,
+          willChange:   "transform",
+          transition:   "transform 0.12s cubic-bezier(0.25,0.1,0.25,1)",
         }}
       />
-      {/* Green ring — trails */}
+      {/* Ring — trails behind at lerp 0.11 */}
       <div
         ref={ringRef}
         aria-hidden="true"
         style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: 30,
-          height: 30,
+          position:     "fixed",
+          top: 0, left: 0,
+          width:        RING_SIZE,
+          height:       RING_SIZE,
           borderRadius: "50%",
-          border: "1.5px solid rgba(63,185,80,0.55)",
-          pointerEvents: "none",
-          zIndex: 999998,
-          willChange: "transform",
-          transition: "opacity 0.25s, border-color 0.2s",
+          border:       `1.5px solid rgba(${COLOR_RGBA},0.6)`,
+          boxShadow:    `0 0 6px rgba(${COLOR_RGBA},0.2)`,
+          pointerEvents:"none",
+          zIndex:       999998,
+          willChange:   "transform",
+          transition:   "opacity 0.25s, border-color 0.15s",
         }}
       />
     </>
