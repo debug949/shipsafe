@@ -15,7 +15,7 @@ ShipSafe is a web security audit tool. Paste a URL and, in roughly fifteen secon
 
 ## Live Demo
 
-**🔗 https://shipsafe-xzne.vercel.app/**
+**🔗 https://shipsafe-vihan.vercel.app/**
 
 Try it on any public website — `https://github.com`, `https://example.com`, or your own project.
 
